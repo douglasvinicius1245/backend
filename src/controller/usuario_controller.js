@@ -10,11 +10,11 @@ export default (router) => {
             if (professor.error) {
                 res.status(professor.status).json({ error: professor.error });
             } else {
-                res.json(aluno);
+                res.json(professor);
             }
         });
     }),
-    
+
     router.post('/login/aluno', (req, res) => {
         getAlunoLogin(req.body).then(aluno => {
             if (aluno.error) {
