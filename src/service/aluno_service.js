@@ -19,6 +19,21 @@ export async function getAluno(id) {
     }
 }
 
+export async function getAlunoLogin(body) {
+    try {
+        const { email, senha } = body;
+        const alunoEncontrado = await aluno.findOne({ email, senha }).lean();
+
+        if (!alunoEncontrado) {
+            return { error: 'Credenciais inválidas. Verifique seu e-mail e senha.', status: 401 };
+        }
+
+        return alunoEncontrado;
+    } catch (err) {
+        return { error: err.message, status: 400 };
+    }
+}
+
 export async function getAlunos() {
     try {
         // .lean() ajuda na performance, retornando objetos JS puros em vez de documentos pesados do Mongoose

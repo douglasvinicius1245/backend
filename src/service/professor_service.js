@@ -24,6 +24,22 @@ export async function createProfessor(body) {
     }
 }
 
+export async function getProfessorLogin(body) {
+    try {
+        const { email, senha } = body;
+
+        const professorEncontrado = await professor.findOne({ email, senha }).lean();
+
+        if (!professorEncontrado) {
+            return { error: 'Credenciais inválidas. Verifique seu e-mail e senha.', status: 401 };
+        }
+
+        return professorEncontrado;
+    } catch (err) {
+        return { error: err.message, status: 400 };
+    }
+}
+
 /**
  * 2. Lista todos os professores
  */
