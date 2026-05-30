@@ -112,3 +112,23 @@ export async function deleteTurma(id) {
         return { error: err.message, status: 400 };
     }
 }
+
+/** 6. Atualiza os dados da turma (nome, ano letivo, professor responsável)
+ */
+export async function updateTurma(id, body) {
+    try {
+        const { nome, anoLetivo, professorResponsavelId } = body;
+
+        const turmaAtualizada = await turma.findByIdAndUpdate(
+            id,
+            { nome, anoLetivo, professorResponsavel: professorResponsavelId },
+            { new: true, runValidators: true }
+        );
+
+        if (!turmaAtualizada) return { error: 'Turma não encontrada.', status: 404 };
+
+        return turmaAtualizada;
+    } catch (err) {
+        return { error: err.message, status: 400 };
+    }
+}

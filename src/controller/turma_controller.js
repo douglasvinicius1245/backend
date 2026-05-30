@@ -1,11 +1,11 @@
 // 1. Imports no topo do arquivo
-import { createTurma, getTurmaById, deleteTurma} from '../service/turma_service.js';
+import { createTurma, getTurmaById, deleteTurma, updateTurma} from '../service/turma_service.js';
 
 // 2. Export padrão do ES Modules para o seu carregador automático no api.js ler
 export default (router) => {
 
     router.get('/turma/:id', (req, res) => {
-        getTurma(req.params.id).then(turma => {
+        getTurmaById(req.params.id).then(turma => {
             if (turma.error) {
                 res.status(turma.status).json({ error: turma.error });
             } else {
@@ -28,12 +28,12 @@ export default (router) => {
         });
     });
 
-    // router.put('/turma/:id', (req, res) => {
-    //     // Passamos o ID da URL e o corpo da requisição alterado
-    //     updateTurma(req.params.id, req.body).then(turmaAtualizada => {
-    //         res.json(turmaAtualizada);
-    //     });
-    // });
+    router.put('/turma/:id', (req, res) => {
+        // Passamos o ID da URL e o corpo da requisição alterado
+        updateTurma(req.params.id, req.body).then(turmaAtualizada => {
+            res.json(turmaAtualizada);
+        });
+    });
 
     router.delete('/turma/:id', (req, res) => {
         // Passamos apenas o ID que queremos deletar
