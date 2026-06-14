@@ -5,7 +5,7 @@ const alunoSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     idade: { type: Number },
     senha: { type: String, required: true },
-    papel: { type: String, enum: ['aluno', 'admin'], default: 'student' },
+    papel: { type: String, enum: ['student', 'admin'], default: 'student' },
     
     // 👇 ADICIONADO: Referência para a turma do aluno
     turma: {
