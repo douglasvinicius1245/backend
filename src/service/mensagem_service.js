@@ -3,20 +3,38 @@ import Message from '../model/mensagem.js';
 import Turma from '../model/turma.js';
 
 /**
- * 1. Cria uma sala de chat (Geral ou automática para uma Turma)
+ * 1. Cria uma sala de chat se não existir ou atualiza adicionando membros caso já exista
  */
 export async function criarSala(body) {
     try {
         const { nome, descricao, criadorId, membrosIds } = body;
 
+        // 🔍 PASSO 1: Procura se já existe uma sala com esse nome exato
+        const salaExistente = await Room.findOne({ nome: nome });
+
+        if (salaExistente) {
+            // 🔄 PASSO 2: Se a sala já existe, adiciona os novos membros sem duplicar
+            // O $addToSet garante que o mesmo ID de aluno não entre duas vezes na lista
+            const salaAtualizada = await Room.findByIdAndUpdate(
+                salaExistente._id,
+                { $addToSet: { membros: { $each: membrosIds || [] } } },
+                { new: true } // Retorna a sala já modificada
+            ).populate('criador', 'nome email').lean();
+
+            return salaAtualizada;
+        }
+
+        // ➕ PASSO 3: Se a sala NÃO existe, cria uma do zero normalmente
         const novaSala = new Room({
             nome,
             descricao,
             criador: criadorId,
-            membros: membrosIds || [] // Array com IDs de alunos/professores
+            membros: membrosIds || []
         });
 
-        return await novaSala.save();
+        const salaSalva = await novaSala.save();
+        return await Room.findById(salaSalva._id).populate('criador', 'nome email').lean();
+
     } catch (err) {
         return { error: err.message, status: 400 };
     }
