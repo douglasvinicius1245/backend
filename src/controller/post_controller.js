@@ -1,6 +1,6 @@
 import * as postService from '../services/PostService.js'; // Ajuste o caminho se necessário
 
-export default function(router, upload) {
+export default (router, upload) => {
   
   // Rota de criação de Post (Intercepta o campo 'image' com o multer que veio do arquivo principal)
   router.post('/posts', upload.single('image'), async (req, res) => {
