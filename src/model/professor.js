@@ -21,6 +21,11 @@ const professorSchema = new mongoose.Schema({
     senha: {
         type: String,
         required: true
+    },
+    papel: {
+        type: String,
+        enum: ['teacher', 'admin'],
+        default: 'teacher'
     }
 }, { timestamps: true });
 
