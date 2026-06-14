@@ -2,6 +2,9 @@ import Room from '../model/sala.js';
 import Message from '../model/mensagem.js';
 import Turma from '../model/turma.js';
 
+import '../model/aluno.js';
+import '../model/professor.js';
+
 /**
  * 1. Cria uma sala de chat se não existir ou atualiza adicionando membros caso já exista
  */
