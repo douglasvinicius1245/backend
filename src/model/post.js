@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const PostSchema = new mongoose.Schema({
   id: { type: String, required: true, unique: true },
@@ -9,6 +9,7 @@ const PostSchema = new mongoose.Schema({
   image: { type: String },
   likes: { type: [String], default: [] },
   createdAt: { type: Date, default: Date.now },
-});
+  updatedAt: { type: Date, default: Date.now },
+}, { timestamps: true });
 
 export default mongoose.model('Post', PostSchema);
