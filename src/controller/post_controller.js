@@ -1,4 +1,4 @@
-import * as postService from '../services/PostService.js'; // Ajuste o caminho se necessário
+import * as postService from '../service/post_service.js'; // Ajuste o caminho se necessário
 
 export default (router, upload) => {
   
