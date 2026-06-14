@@ -1,4 +1,4 @@
-import Post from '../model/Post.js'; // Ajuste o caminho se necessário
+import Post from '../model/post.js'; // Ajuste o caminho se necessário
 
 // Criar uma nova publicação
 // export async function createPost(postData) {
