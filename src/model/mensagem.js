@@ -5,25 +5,31 @@ const messageSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Room',
         required: true,
-        index: true // 👈 INDEX IMPORTANTÍSSIMO para buscar as mensagens dessa sala rápido!
+        index: true 
     },
     remetente: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'aluno',
-        required: true
+        required: true,
+        // 🚀 MÁGICA AQUI: O ref se torna dinâmico apontando para o campo 'onModel'
+        refPath: 'onModel' 
+    },
+    // Guarda dinamicamente 'aluno' ou 'professor' para o Mongoose saber onde buscar no populate
+    onModel: {
+        type: String,
+        required: true,
+        enum: ['aluno', 'professor'],
+        default: 'aluno'
     },
     conteudo: {
         type: String,
         required: true
     },
-    // Controle para caso queira anexar arquivos de estudo
     anexo: {
         url: String,
         tipoAnexo: { type: String, enum: ['imagem', 'pdf', 'outro'] }
     }
 }, { timestamps: true });
 
-// Criamos um index composto para quando você implementar paginação (ex: carregar as últimas 20 mensagens)
 messageSchema.index({ roomId: 1, createdAt: -1 });
 
 export default mongoose.model('Message', messageSchema);

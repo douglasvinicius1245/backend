@@ -23,12 +23,16 @@ export default (router) => {
         res.json(salas);
     });
 
-    // 3. Enviar uma nova mensagem para dentro de uma sala
+    // 3. Enviar uma nova mensagem para dentro de uma sala (Atualizado com papel do remetente)
     router.post('/chats/salas/:roomId/mensagens', async (req, res) => {
-        const { remetenteId, conteudo } = req.body;
+        // Recebe o papel vindo do frontend ('aluno' ou 'professor')
+        const { remetenteId, conteudo, papelRemetente } = req.body; 
         const { roomId } = req.params;
 
-        const mensagem = await enviarMensagem(roomId, remetenteId, conteudo);
+        // Passamos o papel adaptado para o Service
+        const papelMapeado = papelRemetente === 'teacher' || papelRemetente === 'professor' ? 'professor' : 'aluno';
+
+        const mensagem = await enviarMensagem(roomId, remetenteId, conteudo, papelMapeado);
         if (mensagem.error) return res.status(mensagem.status || 400).json(mensagem);
         
         res.status(201).json(mensagem);

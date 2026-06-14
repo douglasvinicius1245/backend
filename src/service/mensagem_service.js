@@ -55,11 +55,10 @@ export async function listarSalasDoAluno(usuarioId) {
 }
 
 /**
- * 3. Salva uma nova mensagem vinculada a uma Sala e a um Remetente
+ * 3. Salva uma nova mensagem vinculada a uma Sala e a um Remetente (Múltiplas Coleções)
  */
-export async function enviarMensagem(roomId, remetenteId, conteudo) {
+export async function enviarMensagem(roomId, remetenteId, conteudo, papelRemetente = 'aluno') {
     try {
-        // Valida primeiro se a sala existe antes de salvar a mensagem
         const salaExiste = await Room.exists({ _id: roomId });
         if (!salaExiste) {
             return { error: 'A sala de chat informada não existe.', status: 404 };
@@ -68,12 +67,12 @@ export async function enviarMensagem(roomId, remetenteId, conteudo) {
         const novaMensagem = new Message({
             roomId,
             remetente: remetenteId,
-            conteudo
+            conteudo,
+            onModel: papelRemetente // 👈 Define dinamicamente a coleção de busca ('aluno' ou 'professor')
         });
 
         const mensagemSalva = await novaMensagem.save();
         
-        // Retorna a mensagem populando os dados de quem enviou (opcional, ótimo para o frontend)
         return await Message.findById(mensagemSalva._id)
             .populate('remetente', 'nome email')
             .lean();
